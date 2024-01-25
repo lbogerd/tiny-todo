@@ -12,11 +12,37 @@
 	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
+		"commands": [
+			{
+				"command": "todoView.addTodo",
+				"title": "Add"
+			},
+			{
+				"command": "tiny-todo.deleteTodo",
+				"title": "Delete"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "todoView.addTodo",
+					"when": "view == todoView",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "tiny-todo.deleteTodo",
+					"when": "view == todoView && viewItem == todo",
+					"group": "navigation"
+				}
+			]
+		},
 		"views": {
 			"explorer": [
 				{
-					"id": "testView",
-					"name": "Test View"
+					"id": "todoView",
+					"name": "Todo View"
 				}
 			]
 		}
