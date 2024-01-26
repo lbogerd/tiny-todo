@@ -14,26 +14,16 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "todoView.addTodo",
-				"title": "Add"
-			},
-			{
-				"command": "tiny-todo.deleteTodo",
-				"title": "Delete"
+				"command": "todoView.refresh",
+				"title": "Refresh",
+				"icon": "$(sync)"
 			}
 		],
 		"menus": {
 			"view/title": [
 				{
-					"command": "todoView.addTodo",
+					"command": "todoView.refresh",
 					"when": "view == todoView",
-					"group": "navigation"
-				}
-			],
-			"view/item/context": [
-				{
-					"command": "tiny-todo.deleteTodo",
-					"when": "view == todoView && viewItem == todo",
 					"group": "navigation"
 				}
 			]
@@ -49,6 +39,8 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "pnpm run compile",
+		"package": "pnpm vsce package --no-dependencies",
+		"publish": "pnpm vsce publish --no-dependencies",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"pretest": "pnpm run compile && pnpm run lint",
