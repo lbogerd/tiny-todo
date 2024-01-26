@@ -1,9 +1,10 @@
 import * as vscode from "vscode"
+import { TodoProvider } from "../providers/TodoProvider"
 
 export class TodoView {
 	constructor(context: vscode.ExtensionContext) {
 		const view = vscode.window.createTreeView("todoView", {
-			treeDataProvider: aNodeWithIdTreeDataProvider(),
+			treeDataProvider: new TodoProvider(context.extensionPath),
 			showCollapseAll: true,
 		})
 
@@ -22,14 +23,14 @@ export class TodoView {
 			}
 		})
 
-		vscode.commands.registerCommand("todoView.reveal", async () => {
-			const key = await vscode.window.showInputBox({
-				placeHolder: "Type the label of the item to reveal",
-			})
-			if (key) {
-				await view.reveal({ key }, { focus: true, select: false, expand: true })
-			}
-		})
+		// vscode.commands.registerCommand("todoView.reveal", async () => {
+		// 	const key = await vscode.window.showInputBox({
+		// 		placeHolder: "Type the label of the item to reveal",
+		// 	})
+		// 	if (key) {
+		// 		await view.reveal({ key }, { focus: true, select: false, expand: true })
+		// 	}
+		// })
 
 		vscode.commands.registerCommand("todoView.changeTitle", async () => {
 			const title = await vscode.window.showInputBox({
