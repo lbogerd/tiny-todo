@@ -75,49 +75,6 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 		}
 	}
 
-	// getChildren(
-	// 	element?: TodoItem | undefined
-	// ): vscode.ProviderResult<TodoItem[]> {
-	// 	if (element) {
-	// 		return Promise.resolve(element.subtasks)
-	// 	} else {
-	// 		const todoFile = path.join(this.workspaceRoot, "todo.txt")
-	// 		if (fs.existsSync(todoFile)) {
-	// 			const todosParsedFromFile = this.parseFileToItems(todoFile)
-
-	// 			// // convert the parsed items into a tree to be displayed
-	// 			// // making sure to include subtasks and subsubtasks as children
-	// 			// // of their parent tasks
-	// 			// const tree: TodoItem[] = []
-	// 			// for (const todo of todosParsedFromFile) {
-	// 			// 	if (todo.level === "task") {
-	// 			// 		tree.push(todo)
-	// 			// 	} else if (todo.level === "subtask") {
-	// 			// 		tree[tree.length - 1].subtasks.push(todo)
-	// 			// 	} else if (todo.level === "subsubtask") {
-	// 			// 		tree[tree.length - 1].subtasks[
-	// 			// 			tree[tree.length - 1].subtasks.length - 1
-	// 			// 		].subtasks.push(todo)
-	// 			// 	}
-	// 			// }
-	// 			// temp test tree
-	// 			const tree = {
-	// 				"main task": {
-	// 					"subtask 1": {
-	// 						"subsubtask 1": {},
-	// 						"subsubtask 2": {},
-	// 					},
-	// 				},
-	// 			}
-
-	// 			// @ts-ignore
-	// 			return Promise.resolve(tree)
-	// 		} else {
-	// 			return Promise.resolve([])
-	// 		}
-	// 	}
-	// }
-
 	private parseFileToItems(filePath: fs.PathLike): TodoItem[] {
 		// expected file format:
 		// [ ] task 1 | the description for task 1
@@ -134,21 +91,14 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 			}
 
 			// determine and set task level
+			const levels: TaskLevel[] = ["task", "subtask", "subsubtask"]
 			const levelAsNumber = line.match(/_/g)?.length ?? 0
-			let level: TaskLevel = "task"
-			switch (levelAsNumber) {
-				case 0:
-					level = "task"
-					break
-				case 1:
-					level = "subtask"
-					break
-				case 2:
-					level = "subsubtask"
-					break
-				default:
-					throw new Error("Invalid level")
+
+			if (levelAsNumber > 2) {
+				throw new Error("Invalid level")
 			}
+
+			let level: TaskLevel = levels[levelAsNumber]
 
 			// determine and set completion status
 			const completed = line
