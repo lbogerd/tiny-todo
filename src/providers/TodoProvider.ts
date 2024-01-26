@@ -12,51 +12,118 @@ type TodoItem = {
 	subtasks: TodoItem[]
 }
 
-export class TodoProvider implements vscode.TreeDataProvider<TodoItem> {
+export class TodoTreeItem extends vscode.TreeItem {
+	constructor(
+		public readonly todoItem: TodoItem,
+		public readonly collapsibleState: vscode.TreeItemCollapsibleState
+	) {
+		super(todoItem.label, collapsibleState)
+
+		this.tooltip = todoItem.description ?? ""
+		this.description = todoItem.description ?? ""
+		this.checkboxState = todoItem.completed
+			? vscode.TreeItemCheckboxState.Checked
+			: vscode.TreeItemCheckboxState.Unchecked
+	}
+
+	contextValue = "todoItem"
+}
+
+export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
+	private _onDidChangeTreeData: vscode.EventEmitter<
+		TodoTreeItem | undefined | void
+	> = new vscode.EventEmitter<TodoTreeItem | undefined | void>()
+	readonly onDidChangeTreeData: vscode.Event<TodoTreeItem | undefined | void> =
+		this._onDidChangeTreeData.event
+
 	constructor(private workspaceRoot: string) {}
-	// onDidChangeTreeData?:
-	// 	| vscode.Event<void | TodoItem | TodoItem[] | null | undefined>
-	// 	| undefined
-	getTreeItem(element: TodoItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+
+	refresh(): void {
+		this._onDidChangeTreeData.fire()
+	}
+
+	getTreeItem(element: TodoTreeItem): vscode.TreeItem {
 		return element
 	}
 
-	getChildren(
-		element?: TodoItem | undefined
-	): vscode.ProviderResult<TodoItem[]> {
+	getChildren(element?: TodoTreeItem): Thenable<TodoTreeItem[]> {
+		// TODO: is this needed if we generate the file on activation?
 		if (!this.workspaceRoot) {
-			vscode.window.showInformationMessage("No dependency in empty workspace")
+			vscode.window.showInformationMessage("No todo.txt found")
 			return Promise.resolve([])
 		}
 
 		if (element) {
-			return Promise.resolve(element.subtasks)
+			return Promise.resolve(
+				element.todoItem.subtasks.map(
+					(subtask) =>
+						new TodoTreeItem(
+							subtask,
+							subtask.subtasks.length > 0
+								? vscode.TreeItemCollapsibleState.Expanded
+								: vscode.TreeItemCollapsibleState.None
+						)
+				)
+			)
 		} else {
-			const todoFile = path.join(this.workspaceRoot, "todo.txt")
-			if (fs.existsSync(todoFile)) {
-				return Promise.resolve(this.parseFileToItems(todoFile))
-			} else {
-				return Promise.resolve([])
-			}
+			return Promise.resolve(
+				this.parseFileToItems(path.join(this.workspaceRoot, "todo.txt")).map(
+					(todoItem) =>
+						new TodoTreeItem(todoItem, vscode.TreeItemCollapsibleState.Expanded)
+				)
+			)
 		}
 	}
-	// getParent?(element: TodoItem): vscode.ProviderResult<TodoItem> {
-	// 	throw new Error("Method not implemented.")
-	// }
-	// resolveTreeItem?(
-	// 	item: vscode.TreeItem,
-	// 	element: TodoItem,
-	// 	token: vscode.CancellationToken
-	// ): vscode.ProviderResult<vscode.TreeItem> {
-	// 	throw new Error("Method not implemented.")
-	// }
 
-	// expected file format:
-	// [ ] task 1 | the description for task 1
-	// _[ ] subtask 1 <intentionally left blank>
-	// __[x] subsubtask 1 | the last description
+	// getChildren(
+	// 	element?: TodoItem | undefined
+	// ): vscode.ProviderResult<TodoItem[]> {
+	// 	if (element) {
+	// 		return Promise.resolve(element.subtasks)
+	// 	} else {
+	// 		const todoFile = path.join(this.workspaceRoot, "todo.txt")
+	// 		if (fs.existsSync(todoFile)) {
+	// 			const todosParsedFromFile = this.parseFileToItems(todoFile)
+
+	// 			// // convert the parsed items into a tree to be displayed
+	// 			// // making sure to include subtasks and subsubtasks as children
+	// 			// // of their parent tasks
+	// 			// const tree: TodoItem[] = []
+	// 			// for (const todo of todosParsedFromFile) {
+	// 			// 	if (todo.level === "task") {
+	// 			// 		tree.push(todo)
+	// 			// 	} else if (todo.level === "subtask") {
+	// 			// 		tree[tree.length - 1].subtasks.push(todo)
+	// 			// 	} else if (todo.level === "subsubtask") {
+	// 			// 		tree[tree.length - 1].subtasks[
+	// 			// 			tree[tree.length - 1].subtasks.length - 1
+	// 			// 		].subtasks.push(todo)
+	// 			// 	}
+	// 			// }
+	// 			// temp test tree
+	// 			const tree = {
+	// 				"main task": {
+	// 					"subtask 1": {
+	// 						"subsubtask 1": {},
+	// 						"subsubtask 2": {},
+	// 					},
+	// 				},
+	// 			}
+
+	// 			// @ts-ignore
+	// 			return Promise.resolve(tree)
+	// 		} else {
+	// 			return Promise.resolve([])
+	// 		}
+	// 	}
+	// }
 
 	private parseFileToItems(filePath: fs.PathLike): TodoItem[] {
+		// expected file format:
+		// [ ] task 1 | the description for task 1
+		// _[ ] subtask 1 <intentionally left blank>
+		// __[x] subsubtask 1 | the last description
+
 		const lines = fs.readFileSync(filePath, "utf-8").split("\n")
 		const items: TodoItem[] = []
 

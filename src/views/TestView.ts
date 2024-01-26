@@ -30,7 +30,7 @@
 // 	}
 // }
 
-// const tree: any = {
+// const tree = {
 // 	c: {},
 // 	a: {
 // 		aa: {
@@ -101,7 +101,7 @@
 // 	}
 // }
 
-// function getTreeElement(element: string): any {
+// function getTreeElement(element: string) {
 // 	let parent = tree
 // 	for (let i = 0; i < element.length; i++) {
 // 		parent = parent[element.substring(0, i + 1)]

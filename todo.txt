@@ -1,3 +1,4 @@
 [ ] main task
 _[ ] sub task | description stuff for sub task
+_[ ] this is pretty cool | i think it's pretty cool honestly
 __[x] subsubtask | this should be completed yo
