@@ -36,8 +36,6 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 	readonly onDidChangeTreeData: vscode.Event<TodoTreeItem | undefined | void> =
 		this._onDidChangeTreeData.event
 
-	constructor(private workspaceRoot: string) {}
-
 	refresh(): void {
 		this._onDidChangeTreeData.fire()
 	}
@@ -47,12 +45,6 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 	}
 
 	getChildren(element?: TodoTreeItem): Thenable<TodoTreeItem[]> {
-		// TODO: is this needed if we generate the file on activation?
-		if (!this.workspaceRoot) {
-			vscode.window.showInformationMessage("No todo.txt found")
-			return Promise.resolve([])
-		}
-
 		if (element) {
 			return Promise.resolve(
 				element.todoItem.subtasks.map(
@@ -67,9 +59,22 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 			)
 		} else {
 			return Promise.resolve(
-				this.parseFileToItems(path.join(this.workspaceRoot, "todo.txt")).map(
+				this.parseFileToItems(
+					vscode.workspace.workspaceFolders &&
+						vscode.workspace.workspaceFolders.length > 0
+						? path.join(
+								vscode.workspace.workspaceFolders[0].uri.fsPath,
+								"todo.txt"
+						  )
+						: ""
+				).map(
 					(todoItem) =>
-						new TodoTreeItem(todoItem, vscode.TreeItemCollapsibleState.Expanded)
+						new TodoTreeItem(
+							todoItem,
+							todoItem.subtasks.length > 0
+								? vscode.TreeItemCollapsibleState.Expanded
+								: vscode.TreeItemCollapsibleState.None
+						)
 				)
 			)
 		}

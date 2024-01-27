@@ -6,7 +6,7 @@ export class TodoView {
 	readonly todoProvider: TodoProvider | undefined = this._todoProvider
 
 	constructor(context: vscode.ExtensionContext) {
-		this._todoProvider = new TodoProvider(context.extensionPath)
+		this._todoProvider = new TodoProvider()
 
 		const view = vscode.window.createTreeView("todoView", {
 			treeDataProvider: this._todoProvider,
