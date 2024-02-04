@@ -8,14 +8,14 @@ export class TodoView {
 	constructor(context: vscode.ExtensionContext) {
 		this._todoProvider = new TodoProvider()
 
-		const view = vscode.window.createTreeView("todoView", {
+		const view = vscode.window.createTreeView("tinyTodo", {
 			treeDataProvider: this._todoProvider,
 			showCollapseAll: true,
 		})
 
 		context.subscriptions.push(view)
 
-		vscode.commands.registerCommand("todoView.refresh", async () => {
+		vscode.commands.registerCommand("tinyTodo.refresh", async () => {
 			this._todoProvider?.refresh()
 		})
 	}

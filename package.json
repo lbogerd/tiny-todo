@@ -14,7 +14,7 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "todoView.refresh",
+				"command": "tinyTodo.refresh",
 				"title": "Refresh",
 				"icon": "$(sync)"
 			}
@@ -22,7 +22,7 @@
 		"menus": {
 			"view/title": [
 				{
-					"command": "todoView.refresh",
+					"command": "tinyTodo.refresh",
 					"when": "view == todoView",
 					"group": "navigation"
 				}
@@ -31,7 +31,7 @@
 		"views": {
 			"explorer": [
 				{
-					"id": "todoView",
+					"id": "tinyTodo",
 					"name": "Todo View"
 				}
 			]
