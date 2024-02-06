@@ -3,6 +3,7 @@ import * as fs from "fs"
 import * as path from "path"
 
 export type TodoItem = {
+	lineNumber?: number
 	label: string
 	completed: boolean
 	level: 0 | 1 | 2
@@ -22,9 +23,8 @@ export class TodoTreeItem extends vscode.TreeItem {
 		this.checkboxState = todoItem.completed
 			? vscode.TreeItemCheckboxState.Checked
 			: vscode.TreeItemCheckboxState.Unchecked
+		this.contextValue = `level${todoItem.level}Item`
 	}
-
-	contextValue = "todoItem"
 }
 
 export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
@@ -87,6 +87,7 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 		const lines = fs.readFileSync(filePath, "utf-8").split("\n")
 		const items: TodoItem[] = []
 
+		let i = 0
 		for (const line of lines) {
 			// skip empty lines
 			if (line.trim().length === 0) {
@@ -124,6 +125,7 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 			switch (level) {
 				case 0:
 					items.push({
+						lineNumber: i,
 						label,
 						completed,
 						level,
@@ -133,6 +135,7 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 					break
 				case 1:
 					items[items.length - 1].subtasks.push({
+						lineNumber: i,
 						label,
 						completed,
 						level,
@@ -144,6 +147,7 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 					items[items.length - 1].subtasks[
 						items[items.length - 1].subtasks.length - 1
 					].subtasks.push({
+						lineNumber: i,
 						label,
 						completed,
 						level,
@@ -152,6 +156,8 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 					})
 					break
 			}
+
+			i++
 		}
 
 		return items
