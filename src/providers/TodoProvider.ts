@@ -2,12 +2,10 @@ import * as vscode from "vscode"
 import * as fs from "fs"
 import * as path from "path"
 
-type TaskLevel = "task" | "subtask" | "subsubtask"
-
-type TodoItem = {
+export type TodoItem = {
 	label: string
 	completed: boolean
-	level: TaskLevel
+	level: 0 | 1 | 2
 	description?: string
 	subtasks: TodoItem[]
 }
@@ -96,26 +94,23 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 			}
 
 			// determine and set task level
-			const levels: TaskLevel[] = ["task", "subtask", "subsubtask"]
-			const levelAsNumber = line.match(/_/g)?.length ?? 0
+			const level = line.match(/_/g)?.length ?? 0
 
-			if (levelAsNumber > 2) {
+			if (level > 2) {
 				throw new Error("Invalid level")
 			}
-
-			let level: TaskLevel = levels[levelAsNumber]
 
 			// determine and set completion status
 			const completed = line
 				// chop off the level (e.g. "__")
-				.substring(levelAsNumber)
+				.substring(level)
 				.toLowerCase()
 				.startsWith("[x]")
 
 			// determine and set label
 			const label = line
 				// chop off the level and completion status (e.g. "__[x] ")
-				.substring(levelAsNumber + 4)
+				.substring(level + 4)
 				.split("|")[0]
 				.trim()
 
@@ -126,9 +121,8 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 			}
 
 			// add item to items
-			// TODO: refactor this to be more DRY
 			switch (level) {
-				case "task":
+				case 0:
 					items.push({
 						label,
 						completed,
@@ -137,7 +131,7 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 						subtasks: [],
 					})
 					break
-				case "subtask":
+				case 1:
 					items[items.length - 1].subtasks.push({
 						label,
 						completed,
@@ -146,7 +140,7 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 						subtasks: [],
 					})
 					break
-				case "subsubtask":
+				case 2:
 					items[items.length - 1].subtasks[
 						items[items.length - 1].subtasks.length - 1
 					].subtasks.push({

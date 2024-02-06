@@ -8,7 +8,7 @@ export class TodoView {
 	constructor(context: vscode.ExtensionContext) {
 		this._todoProvider = new TodoProvider()
 
-		const view = vscode.window.createTreeView("tinyTodo", {
+		const view = vscode.window.createTreeView("tinyTodoView", {
 			treeDataProvider: this._todoProvider,
 			showCollapseAll: true,
 		})

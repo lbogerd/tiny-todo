@@ -23,7 +23,7 @@
 			"view/title": [
 				{
 					"command": "tinyTodo.refresh",
-					"when": "view == todoView",
+					"when": "view == tinyTodoView",
 					"group": "navigation"
 				}
 			]
@@ -31,7 +31,7 @@
 		"views": {
 			"explorer": [
 				{
-					"id": "tinyTodo",
+					"id": "tinyTodoView",
 					"name": "Todo View"
 				}
 			]
