@@ -2,6 +2,7 @@
 	"name": "tiny-todo",
 	"displayName": "tiny-todo",
 	"description": "Tiny todo list in VS Code itself.",
+	"publisher": "wtrndev",
 	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.85.0"
@@ -10,9 +11,9 @@
 		"Other"
 	],
 	"repository": {
-    		"type": "git",
-    		"url": "https://github.com/lbogerd/tiny-todo.git"
-  	},
+		"type": "git",
+		"url": "https://github.com/lbogerd/tiny-todo.git"
+	},
 	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
