@@ -1,26 +1,16 @@
 # Tiny-Todo VSCode Extension
 
-This is a simple yet powerful VSCode extension named "Tiny-Todo". It allows you to manage your todo list directly within your VSCode environment.
+A simple extension I built for when I'm building simple stuff where full featured is overkill.
 
-## Features
+## Current features
 
-- **Todo List Management**: Create, update, and delete todos directly in your editor.
-- **Integrated View**: Todos are displayed in a dedicated view in the activity bar.
-- **Quick Access**: Use the command palette for quick access to todo operations.
+- **Based on a simple todo.txt**: Use a simply formatted todo.txt so you can track progress right there in your repository.
+- **Integrated View**: Todos are displayed in a dedicated view where you can update and archive them 
 
 ## Requirements
 
 This extension doesn't have any specific requirements or dependencies outside of VSCode.
 
-## Extension Settings
+## Future development
 
-This extension contributes the following settings:
-
-- `tinyTodo.enable`: Enable/disable this extension.
-- `tinyTodo.filePath`: Specify the file path for the todo list.
-
-## How to Use
-
-After installing the extension, a new "Tiny-Todo" view will appear in the activity bar. You can add a new todo by clicking on the "+" icon, update a todo by clicking on it, and delete a todo by clicking on the trash bin icon.
-
-For any issues or feature requests, please open an issue on the GitHub repository.
+As mentioned this extension is made for just myself so any further work will happen when something annoys me too much to keep doing it manually.
