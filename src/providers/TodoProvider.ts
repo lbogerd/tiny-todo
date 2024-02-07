@@ -11,6 +11,22 @@ export type TodoItem = {
 	subtasks: TodoItem[]
 }
 
+export function stringifyItem(item: TodoItem): string {
+	let line = ""
+	for (let i = 0; i < item.level; i++) {
+		line += "_"
+	}
+
+	line += item.completed ? "[x] " : "[ ] "
+	line += item.label
+
+	if (item.description) {
+		line += ` | ${item.description}`
+	}
+
+	return line
+}
+
 export class TodoTreeItem extends vscode.TreeItem {
 	constructor(
 		public readonly todoItem: TodoItem,
@@ -23,7 +39,7 @@ export class TodoTreeItem extends vscode.TreeItem {
 		this.checkboxState = todoItem.completed
 			? vscode.TreeItemCheckboxState.Checked
 			: vscode.TreeItemCheckboxState.Unchecked
-		this.contextValue = `level${todoItem.level}Item`
+		this.contextValue = `todoItem`
 	}
 }
 
@@ -78,22 +94,6 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 		}
 	}
 
-	private stringifyItem(item: TodoItem): string {
-		let line = ""
-		for (let i = 0; i < item.level; i++) {
-			line += "_"
-		}
-
-		line += item.completed ? "[x] " : "[ ] "
-		line += item.label
-
-		if (item.description) {
-			line += ` | ${item.description}`
-		}
-
-		return line
-	}
-
 	public async toggleCheckboxState(
 		item: TodoItem,
 		checked: vscode.TreeItemCheckboxState
@@ -132,13 +132,13 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 		const lines: string[] = []
 
 		items.forEach((item) => {
-			lines.push(this.stringifyItem(item))
+			lines.push(stringifyItem(item))
 
 			item.subtasks.forEach((subtask) => {
-				lines.push(this.stringifyItem(subtask))
+				lines.push(stringifyItem(subtask))
 
 				subtask.subtasks.forEach((subsubtask) => {
-					lines.push(this.stringifyItem(subsubtask))
+					lines.push(stringifyItem(subsubtask))
 				})
 			})
 		})

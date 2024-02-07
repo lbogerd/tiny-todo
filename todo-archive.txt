@@ -1,3 +1,15 @@
+__[x] remove from todo.txt
+# 2/7/2024, 10:31:24 PM
+__[x] add completed items to top with yyyymmdd-hhmm in utc
+# 2/7/2024, 10:31:24 PM
+__[x] target or create todo-archive.txt
+# 2/7/2024, 10:31:24 PM
+_[x] add button to item
+# 2/7/2024, 10:31:24 PM
+_[x] add archive command
+# 2/7/2024, 10:31:24 PM
+[x] add archive functionality
+# 2/7/2024, 10:31:24 PM
 20240207
 [x] data sync functions | todo.txt <> extension
 _[x] parse file | file > extension

@@ -2,7 +2,7 @@
 	"name": "tiny-todo",
 	"displayName": "tiny-todo",
 	"description": "Tiny todo list in VS Code itself.",
-	"version": "0.0.3",
+	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.85.0"
 	},
@@ -17,6 +17,11 @@
 				"command": "tinyTodo.refresh",
 				"title": "Refresh",
 				"icon": "$(sync)"
+			},
+			{
+				"command": "tinyTodo.archive",
+				"title": "Archive",
+				"icon": "$(archive)"
 			}
 		],
 		"menus": {
@@ -25,6 +30,13 @@
 					"command": "tinyTodo.refresh",
 					"when": "view == tinyTodoView",
 					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "tinyTodo.archive",
+					"when": "view == tinyTodoView && viewItem == todoItem",
+					"group": "inline"
 				}
 			]
 		},

@@ -1,7 +1,12 @@
 import * as vscode from "vscode"
-import { TodoProvider } from "../providers/TodoProvider"
+import {
+	TodoProvider,
+	TodoTreeItem,
+	stringifyItem,
+} from "../providers/TodoProvider"
 import * as fs from "fs"
 import path from "path"
+import { addToArchive, removeFromActiveFile } from "../utils/archive"
 
 export class TodoView {
 	private _todoProvider: TodoProvider | undefined = undefined
@@ -27,6 +32,23 @@ export class TodoView {
 		vscode.commands.registerCommand("tinyTodo.refresh", async () => {
 			this._todoProvider?.refresh()
 		})
+
+		vscode.commands.registerCommand(
+			"tinyTodo.archive",
+			(item: TodoTreeItem) => {
+				// archive item and sub items and sub sub items
+				const itemsToArchive = [
+					item.todoItem,
+					...item.todoItem.subtasks.flat(),
+					...item.todoItem.subtasks.flatMap((subtask) => subtask.subtasks),
+				]
+
+				for (const item of itemsToArchive) {
+					addToArchive(stringifyItem(item))
+				}
+				removeFromActiveFile(itemsToArchive.map((item) => item.lineNumber!))
+			}
+		)
 
 		fs.watch(
 			path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, "todo.txt"),
