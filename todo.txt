@@ -1,7 +1,0 @@
-[x] data sync functions | todo.txt <> extension
-_[x] parse file | file > extension
-_[x] sync complete item | extension > file
-__[x] listen to checkbox toggle event
-__[x] find matching line in file
-__[x] update matching line
-__[x] reload todo view
