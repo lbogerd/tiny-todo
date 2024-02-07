@@ -1,5 +1,7 @@
 import * as vscode from "vscode"
-import { TodoProvider, TodoTreeItem } from "../providers/TodoProvider"
+import { TodoProvider } from "../providers/TodoProvider"
+import * as fs from "fs"
+import path from "path"
 
 export class TodoView {
 	private _todoProvider: TodoProvider | undefined = undefined
@@ -25,5 +27,16 @@ export class TodoView {
 		vscode.commands.registerCommand("tinyTodo.refresh", async () => {
 			this._todoProvider?.refresh()
 		})
+
+		fs.watch(
+			path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, "todo.txt"),
+			(eventType) => {
+				if (eventType !== "change") {
+					return
+				}
+
+				this._todoProvider?.refresh()
+			}
+		)
 	}
 }
