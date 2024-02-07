@@ -97,7 +97,7 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 			// determine and set task level
 			const level = line.match(/_/g)?.length ?? 0
 
-			if (level > 2) {
+			if (!(level === 0 || level === 1 || level === 2)) {
 				throw new Error("Invalid level")
 			}
 
@@ -121,39 +121,27 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 				description = line.split("|")[1].trim()
 			}
 
+			const item: TodoItem = {
+				lineNumber: i,
+				label,
+				completed,
+				level,
+				description,
+				subtasks: [],
+			}
+
 			// add item to items
 			switch (level) {
 				case 0:
-					items.push({
-						lineNumber: i,
-						label,
-						completed,
-						level,
-						description,
-						subtasks: [],
-					})
+					items.push(item)
 					break
 				case 1:
-					items[items.length - 1].subtasks.push({
-						lineNumber: i,
-						label,
-						completed,
-						level,
-						description,
-						subtasks: [],
-					})
+					items[items.length - 1].subtasks.push(item)
 					break
 				case 2:
 					items[items.length - 1].subtasks[
 						items[items.length - 1].subtasks.length - 1
-					].subtasks.push({
-						lineNumber: i,
-						label,
-						completed,
-						level,
-						description,
-						subtasks: [],
-					})
+					].subtasks.push(item)
 					break
 			}
 
