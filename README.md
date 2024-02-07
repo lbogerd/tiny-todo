@@ -1,6 +1,6 @@
 # Tiny-Todo VSCode Extension
 
-A simple extension I built for when I'm building simple stuff where full featured is overkill.
+A simple extension I built for when I'm building simple stuff where a full featured issue tracker is overkill.
 
 ## Current features
 
