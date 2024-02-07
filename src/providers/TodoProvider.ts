@@ -78,6 +78,76 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 		}
 	}
 
+	private stringifyItem(item: TodoItem): string {
+		let line = ""
+		for (let i = 0; i < item.level; i++) {
+			line += "_"
+		}
+
+		line += item.completed ? "[x] " : "[ ] "
+		line += item.label
+
+		if (item.description) {
+			line += ` | ${item.description}`
+		}
+
+		return line
+	}
+
+	public async toggleCheckboxState(
+		item: TodoItem,
+		checked: vscode.TreeItemCheckboxState
+	): Promise<void> {
+		const filePath =
+			vscode.workspace.workspaceFolders &&
+			vscode.workspace.workspaceFolders.length > 0
+				? path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, "todo.txt")
+				: ""
+
+		const items = this.parseFileToItems(filePath)
+		// find item to toggle in tasks, subtasks, and subsubtasks
+		let itemToToggle: TodoItem | undefined
+		items.forEach((task) => {
+			if (task.lineNumber === item.lineNumber) {
+				itemToToggle = task
+			}
+
+			task.subtasks.forEach((subtask) => {
+				if (subtask.lineNumber === item.lineNumber) {
+					itemToToggle = subtask
+				}
+
+				subtask.subtasks.forEach((subsubtask) => {
+					if (subsubtask.lineNumber === item.lineNumber) {
+						itemToToggle = subsubtask
+					}
+				})
+			})
+		})
+
+		if (itemToToggle) {
+			itemToToggle.completed = checked === vscode.TreeItemCheckboxState.Checked
+		}
+
+		const lines: string[] = []
+
+		items.forEach((item) => {
+			lines.push(this.stringifyItem(item))
+
+			item.subtasks.forEach((subtask) => {
+				lines.push(this.stringifyItem(subtask))
+
+				subtask.subtasks.forEach((subsubtask) => {
+					lines.push(this.stringifyItem(subsubtask))
+				})
+			})
+		})
+
+		fs.writeFileSync(filePath, lines.join("\n"))
+
+		this.refresh()
+	}
+
 	private parseFileToItems(filePath: fs.PathLike): TodoItem[] {
 		// expected file format:
 		// [ ] task 1 | the description for task 1

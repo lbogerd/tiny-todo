@@ -15,13 +15,9 @@ export class TodoView {
 		})
 
 		view.onDidChangeCheckboxState((e) => {
-			const test = e.items.map((item) => {
-				return {
-					lineNumber: item[0].todoItem.lineNumber,
-					isSelected: item[1],
-				}
+			e.items.forEach((item) => {
+				this._todoProvider?.toggleCheckboxState(item[0].todoItem, item[1])
 			})
-			console.log(test)
 		})
 
 		context.subscriptions.push(view)
