@@ -3,7 +3,7 @@
 	"displayName": "tiny-todo",
 	"description": "Tiny todo list in VS Code itself.",
 	"publisher": "wtrndev",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"engines": {
 		"vscode": "^1.85.0"
 	},
