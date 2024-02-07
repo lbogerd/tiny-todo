@@ -2,10 +2,12 @@
 
 A simple extension I built for when I'm building simple stuff where a full featured issue tracker is overkill.
 
+![TinyTodo in Action!0](./simple-demo.gif)
+
 ## Current features
 
 - **Based on a simple todo.txt**: Use a simply formatted todo.txt so you can track progress right there in your repository.
-- **Integrated View**: Todos are displayed in a dedicated view where you can update and archive them 
+- **Integrated View**: Todos are displayed in a dedicated view where you can update and archive them.
 
 ## Requirements
 

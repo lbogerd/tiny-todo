@@ -1,3 +1,17 @@
+__[x] or dont im not your mom | no genuinely
+# 2/7/2024, 11:08:43 PM
+__[x] make sure to do some stuff and so on
+# 2/7/2024, 11:08:42 PM
+_[x] a sub task
+# 2/7/2024, 11:08:42 PM
+__[x] make sure to do some stuff and so on
+# 2/7/2024, 11:07:24 PM
+_[ ] a sub task
+# 2/7/2024, 11:07:24 PM
+[ ] main task | with a description
+# 2/7/2024, 11:07:24 PM
+__[ ] or dont im not your mom | no genuinely
+# 2/7/2024, 11:07:22 PM
 __[x] remove from todo.txt
 # 2/7/2024, 10:31:24 PM
 __[x] add completed items to top with yyyymmdd-hhmm in utc
