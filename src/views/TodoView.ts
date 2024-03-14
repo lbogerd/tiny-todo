@@ -6,7 +6,7 @@ import {
 } from "../providers/TodoProvider"
 import * as fs from "fs"
 import path from "path"
-import { addToArchive, removeFromActiveFile } from "../utils/archive"
+import { addLinesToArchive, removeLinesFromActiveFile } from "../utils/archive"
 
 export class TodoView {
 	private _todoProvider: TodoProvider | undefined = undefined
@@ -43,10 +43,14 @@ export class TodoView {
 					...item.todoItem.subtasks.flatMap((subtask) => subtask.subtasks),
 				]
 
-				for (const item of itemsToArchive) {
-					addToArchive(stringifyItem(item))
-				}
-				removeFromActiveFile(itemsToArchive.map((item) => item.lineNumber!))
+				addLinesToArchive(
+					itemsToArchive.map((item) => stringifyItem(item)),
+					true
+				)
+
+				removeLinesFromActiveFile(
+					itemsToArchive.map((item) => item.lineNumber!)
+				)
 			}
 		)
 

@@ -5,7 +5,7 @@ import * as vscode from "vscode"
 export const getArchiveFilePath = () => {
 	const archivePath = path.join(
 		vscode.workspace.workspaceFolders![0].uri.fsPath,
-		"todo-archive.txt"
+		"done.txt"
 	)
 	const exists = fs.existsSync(archivePath)
 
@@ -15,25 +15,40 @@ export const getArchiveFilePath = () => {
 
 	return archivePath
 }
+
 /**
- * Adds lines of text to the top of the archive file
- * and adds a timestamp to the top of the file
- * @param text The text to add to the archive
+ * Adds lines to the archive file.
+ * @param lines - An array of strings representing the lines to be added.
+ * @param timestamp - Optional boolean flag indicating whether to add a timestamp to each line.
+ * @returns The updated archive content.
  */
-export const addToArchive = (text: string) => {
+export const addLinesToArchive = (lines: string[], timestamp?: boolean) => {
 	const archivePath = getArchiveFilePath()
 
 	const archive = fs.readFileSync(archivePath, "utf-8")
 
-	const lines = archive.split("\n")
+	const existingLines = archive.split("\n")
 
-	lines.unshift(`# ${new Date().toLocaleString()}`)
-	lines.unshift(text)
+	let newLines = lines
+	if (timestamp) {
+		const now = new Date()
+		const timestamp = `# ${now.toISOString()}`
+		newLines = [timestamp, ...lines]
+	}
 
-	fs.writeFileSync(archivePath, lines.join("\n"))
+	const updatedArchive = [...existingLines, ...newLines].join("\n")
+
+	fs.writeFileSync(archivePath, updatedArchive)
+
+	return updatedArchive
 }
 
-export const removeFromActiveFile = (lineNumbers: number[]) => {
+/**
+ * Removes lines from the active file based on the provided line numbers.
+ * @param lineNumbers An array of line numbers to be removed.
+ * @returns An array of lines after the removal.
+ */
+export const removeLinesFromActiveFile = (lineNumbers: number[]) => {
 	const activeFilePath = path.join(
 		vscode.workspace.workspaceFolders![0].uri.fsPath,
 		"todo.txt"
@@ -47,4 +62,6 @@ export const removeFromActiveFile = (lineNumbers: number[]) => {
 	})
 
 	fs.writeFileSync(activeFilePath, newLines.join("\n"))
+
+	return newLines
 }

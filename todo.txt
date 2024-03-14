@@ -1,6 +1,6 @@
-[ ] rework archive functionality
-_[ ] use done.txt instead of todo-archive.txt
-_[ ] add timestamp for blocks instead of per line
+[x] rework archive functionality
+_[x] use done.txt instead of todo-archive.txt
+_[x] add timestamp for blocks instead of per line
 [ ] smoothen task creation and editing
 _[ ] add task with button
 __[ ] 'add' in view menu bar | to create 0 level task
