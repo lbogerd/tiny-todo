@@ -34,8 +34,8 @@ export class TodoTreeItem extends vscode.TreeItem {
 	) {
 		super(todoItem.label, collapsibleState)
 
-		this.tooltip = todoItem.description ?? ""
-		this.description = todoItem.description ?? ""
+		this.tooltip = todoItem.description
+		this.description = todoItem.description
 		this.checkboxState = todoItem.completed
 			? vscode.TreeItemCheckboxState.Checked
 			: vscode.TreeItemCheckboxState.Unchecked
