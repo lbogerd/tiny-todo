@@ -28,6 +28,11 @@
 				"command": "tinyTodo.archive",
 				"title": "Archive",
 				"icon": "$(archive)"
+			},
+			{
+				"command": "tinyTodo.add",
+				"title": "Add",
+				"icon": "$(add)"
 			}
 		],
 		"menus": {
@@ -36,11 +41,21 @@
 					"command": "tinyTodo.refresh",
 					"when": "view == tinyTodoView",
 					"group": "navigation"
+				},
+				{
+					"command": "tinyTodo.add",
+					"when": "view == tinyTodoView",
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [
 				{
 					"command": "tinyTodo.archive",
+					"when": "view == tinyTodoView && viewItem == todoItem",
+					"group": "inline"
+				},
+				{
+					"command": "tinyTodo.add",
 					"when": "view == tinyTodoView && viewItem == todoItem",
 					"group": "inline"
 				}

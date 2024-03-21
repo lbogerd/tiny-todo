@@ -2,11 +2,13 @@ import * as vscode from "vscode"
 import * as fs from "fs"
 import * as path from "path"
 
+export type TodoItemLevel = 0 | 1 | 2
+
 export type TodoItem = {
 	lineNumber?: number
 	label: string
 	completed: boolean
-	level: 0 | 1 | 2
+	level: TodoItemLevel
 	description?: string
 	subtasks: TodoItem[]
 }
@@ -146,6 +148,83 @@ export class TodoProvider implements vscode.TreeDataProvider<TodoTreeItem> {
 		fs.writeFileSync(filePath, lines.join("\n"))
 
 		this.refresh()
+	}
+
+	public async add(item: TodoItem) {
+		const filePath =
+			vscode.workspace.workspaceFolders &&
+			vscode.workspace.workspaceFolders.length > 0
+				? path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, "todo.txt")
+				: ""
+
+		const currentItems = this.parseFileToItems(filePath)
+
+		if (item.lineNumber && item.level === 0) {
+			currentItems.splice(item.lineNumber, 0, item)
+		} else if (item.lineNumber && item.level === 1) {
+			const parent = this.findParentItem(currentItems, item)
+			if (parent) {
+				parent.subtasks.splice(item.lineNumber, 0, item)
+			}
+		} else if (item.lineNumber && item.level === 2) {
+			const parent = this.findParentItem(currentItems, item)
+			if (parent) {
+				const grandparent = this.findParentItem(currentItems, parent)
+
+				if (grandparent) {
+					grandparent.subtasks
+						.find((task) => task === parent)!
+						.subtasks.splice(item.lineNumber, 0, item)
+				}
+			}
+		} else {
+			currentItems.push(item)
+		}
+
+		this.parseItemsToFile(currentItems, filePath)
+
+		this.refresh()
+	}
+
+	private findParentItem(
+		items: TodoItem[],
+		item: TodoItem
+	): TodoItem | undefined {
+		let parentItem: TodoItem | undefined = undefined
+
+		if (item.level === 1) {
+			parentItem = items
+				.filter((task) => task.level === 0)
+				.find((task) => task.subtasks.includes(item))
+		}
+
+		if (item.level === 2) {
+			const subtaskArray = items.flatMap((task) => task.subtasks)
+
+			parentItem = subtaskArray
+				.filter((subtask) => subtask.level === 1)
+				.find((subtask) => subtask.subtasks.includes(item))
+		}
+
+		return parentItem
+	}
+
+	private parseItemsToFile(items: TodoItem[], filePath: fs.PathLike) {
+		const lines: string[] = []
+
+		items.forEach((item) => {
+			lines.push(stringifyItem(item))
+
+			item.subtasks.forEach((subtask) => {
+				lines.push(stringifyItem(subtask))
+
+				subtask.subtasks.forEach((subsubtask) => {
+					lines.push(stringifyItem(subsubtask))
+				})
+			})
+		})
+
+		fs.writeFileSync(filePath, lines.join("\n"))
 	}
 
 	private parseFileToItems(filePath: fs.PathLike): TodoItem[] {

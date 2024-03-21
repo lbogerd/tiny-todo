@@ -1,5 +1,7 @@
 import * as vscode from "vscode"
 import {
+	TodoItem,
+	TodoItemLevel,
 	TodoProvider,
 	TodoTreeItem,
 	stringifyItem,
@@ -32,6 +34,44 @@ export class TodoView {
 		vscode.commands.registerCommand("tinyTodo.refresh", async () => {
 			this._todoProvider?.refresh()
 		})
+
+		vscode.commands.registerCommand(
+			"tinyTodo.add",
+			async (item: TodoTreeItem) => {
+				let newTodo: TodoItem | undefined = undefined
+
+				const label = await vscode.window.showInputBox({
+					prompt: "Enter the task name",
+					placeHolder: "add feature x",
+				})
+
+				const description = await vscode.window.showInputBox({
+					prompt: "Enter the task description",
+					placeHolder: "so users can do y",
+				})
+
+				if (label) {
+					newTodo = {
+						lineNumber:
+							item.todoItem.lineNumber !== undefined
+								? item.todoItem.lineNumber + 1
+								: undefined,
+						completed: false,
+						label: label,
+						description: description,
+						level:
+							item.todoItem.level === 0 || item.todoItem.level === 1
+								? ((item.todoItem.level + 1) as TodoItemLevel)
+								: 0,
+						subtasks: [],
+					}
+				}
+
+				if (newTodo) {
+					this._todoProvider?.add(newTodo)
+				}
+			}
+		)
 
 		vscode.commands.registerCommand(
 			"tinyTodo.archive",
