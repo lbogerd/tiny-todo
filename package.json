@@ -18,6 +18,14 @@
 	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"id": "tinyTodoView",
+					"name": "Tiny Todo"
+				}
+			]
+		},
 		"commands": [
 			{
 				"command": "tinyTodo.refresh",
@@ -25,8 +33,17 @@
 				"icon": "$(sync)"
 			},
 			{
-				"command": "tinyTodo.archive",
-				"title": "Archive",
+				"command": "tinyTodo.completeTask",
+				"title": "Complete Task"
+			},
+			{
+				"command": "tinyTodo.addTodo",
+				"title": "Add Todo",
+				"icon": "$(add)"
+			},
+			{
+				"command": "tinyTodo.archiveTasks",
+				"title": "Archive Completed Tasks",
 				"icon": "$(archive)"
 			}
 		],
@@ -43,14 +60,6 @@
 					"command": "tinyTodo.archive",
 					"when": "view == tinyTodoView && viewItem == todoItem",
 					"group": "inline"
-				}
-			]
-		},
-		"views": {
-			"explorer": [
-				{
-					"id": "tinyTodoView",
-					"name": "Todo View"
 				}
 			]
 		}
@@ -75,5 +84,6 @@
 		"typescript": "^5.3.3",
 		"@vscode/test-cli": "^0.0.4",
 		"@vscode/test-electron": "^2.3.8"
-	}
+	},
+	"packageManager": "pnpm@9.12.1+sha512.e5a7e52a4183a02d5931057f7a0dbff9d5e9ce3161e33fa68ae392125b79282a8a8a470a51dfc8a0ed86221442eb2fb57019b0990ed24fab519bf0e1bc5ccfc4"
 }
