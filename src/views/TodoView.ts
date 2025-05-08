@@ -83,15 +83,18 @@ export class TodoView {
 								}
 
 								try {
-									if (item) {
+									if (item && item.todoItem.lineNumber !== undefined) {
+										const { lineNumber, level, subtasks } = item.todoItem;
+
 										// insert the new todo as a subtask of the item
 										newTodoEntry = `${"-".repeat(
-											item.todoItem.level + 1
+											// max level is 2
+											Math.min(level + 1, 2)
 										)}${newTodoEntry.trim()}`;
 
-										const lineToInsertAfter = item.todoItem.subtasks.length
-											? item.todoItem.subtasks.length
-											: item.todoItem.lineNumber! + 1;
+										const lineToInsertAfter = subtasks.length
+											? lineNumber + 1 + subtasks.length
+											: lineNumber + 1;
 
 										const fileContent = fs.readFileSync(todoFilePath, "utf-8");
 										const lines = fileContent.split("\n");
