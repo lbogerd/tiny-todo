@@ -1,83 +1,94 @@
 {
-  "name": "tiny-todo",
-  "displayName": "TinyTodo",
-  "description": "A tiny todo list in VS Code itself.",
-  "publisher": "wtrndev",
-  "version": "0.1.3",
-  "icon": "icon.png",
-  "engines": {
-    "vscode": "^1.85.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lbogerd/tiny-todo.git"
-  },
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "tinyTodo.refresh",
-        "title": "Refresh",
-        "icon": "$(sync)"
-      },
-      {
-        "command": "tinyTodo.archive",
-        "title": "Archive",
-        "icon": "$(archive)"
-      }
-    ],
-    "menus": {
-      "view/title": [
-        {
-          "command": "tinyTodo.refresh",
-          "when": "view == tinyTodoView",
-          "group": "navigation"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "tinyTodo.archive",
-          "when": "view == tinyTodoView && viewItem == todoItem",
-          "group": "inline"
-        }
-      ]
-    },
-    "views": {
-      "explorer": [
-        {
-          "id": "tinyTodoView",
-          "name": "Todo View"
-        }
-      ]
-    }
-  },
-  "scripts": {
-    "vscode:prepublish": "pnpm run compile",
-    "package": "pnpm vsce package --no-dependencies",
-    "publish": "pnpm vsce publish --no-dependencies",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.85.0",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "18.x",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
-    "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
-    "@vscode/test-cli": "^0.0.4",
-    "@vscode/test-electron": "^2.3.8"
-  },
-  "prettier": {
-    "useTabs": true,
-    "tabWidth": 2
-  }
+	"name": "tiny-todo",
+	"displayName": "TinyTodo",
+	"description": "A tiny todo list in VS Code itself.",
+	"publisher": "wtrndev",
+	"version": "0.1.3",
+	"icon": "icon.png",
+	"engines": {
+		"vscode": "^1.85.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/lbogerd/tiny-todo.git"
+	},
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "tinyTodo.refresh",
+				"title": "Refresh",
+				"icon": "$(sync)"
+			},
+			{
+				"command": "tinyTodo.archive",
+				"title": "Archive",
+				"icon": "$(archive)"
+			},
+			{
+				"command": "tinyTodo.addTodo",
+				"title": "Add Todo",
+				"icon": "$(add)"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "tinyTodo.refresh",
+					"when": "view == tinyTodoView",
+					"group": "navigation"
+				},
+				{
+					"command": "tinyTodo.addTodo",
+					"when": "view == tinyTodoView",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "tinyTodo.archive",
+					"when": "view == tinyTodoView && viewItem == todoItem",
+					"group": "inline"
+				}
+			]
+		},
+		"views": {
+			"explorer": [
+				{
+					"id": "tinyTodoView",
+					"name": "Todo View"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "pnpm run compile",
+		"package": "pnpm vsce package --no-dependencies",
+		"publish": "pnpm vsce publish --no-dependencies",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "pnpm run compile && pnpm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.85.0",
+		"@types/mocha": "^10.0.6",
+		"@types/node": "18.x",
+		"@typescript-eslint/eslint-plugin": "^6.15.0",
+		"@typescript-eslint/parser": "^6.15.0",
+		"eslint": "^8.56.0",
+		"typescript": "^5.3.3",
+		"@vscode/test-cli": "^0.0.4",
+		"@vscode/test-electron": "^2.3.8"
+	},
+	"prettier": {
+		"useTabs": true,
+		"tabWidth": 2
+	},
+	"packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }
