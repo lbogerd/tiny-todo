@@ -53,6 +53,11 @@
 					"command": "tinyTodo.archive",
 					"when": "view == tinyTodoView && viewItem == todoItem",
 					"group": "inline"
+				},
+				{
+					"command": "tinyTodo.addTodo",
+					"when": "view == tinyTodoView && viewItem == todoItem",
+					"group": "inline"
 				}
 			]
 		},

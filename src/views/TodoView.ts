@@ -54,45 +54,67 @@ export class TodoView {
 			}
 		);
 
-		vscode.commands.registerCommand("tinyTodo.addTodo", (level: number = 0) => {
-			const todoFilePath = path.join(
-				vscode.workspace.workspaceFolders![0].uri.fsPath,
-				"todo.txt"
-			);
+		vscode.commands.registerCommand(
+			"tinyTodo.addTodo",
+			(item?: TodoTreeItem) => {
+				const todoFilePath = path.join(
+					vscode.workspace.workspaceFolders![0].uri.fsPath,
+					"todo.txt"
+				);
 
-			vscode.window
-				.showInputBox({ prompt: "Enter a new todo item" })
-				.then((newTodoText) => {
-					if (newTodoText === undefined || newTodoText.trim() === "") {
-						// User cancelled or entered empty string for todo
-						return;
-					}
+				vscode.window
+					.showInputBox({ prompt: "Enter a new todo item" })
+					.then((newTodoText) => {
+						if (newTodoText === undefined || newTodoText.trim() === "") {
+							// User cancelled or entered empty string for todo
+							return;
+						}
 
-					const todoBase = `${"-".repeat(level)}[ ] ${newTodoText.trim()}`;
+						vscode.window
+							.showInputBox({
+								prompt: "Enter an optional comment",
+								placeHolder: "Optional: describe your todo in more detail",
+							})
+							.then((commentText) => {
+								let newTodoEntry = `[ ] ${newTodoText.trim()}`;
 
-					vscode.window
-						.showInputBox({
-							prompt: "Enter an optional comment",
-							placeHolder: "Optional: describe your todo in more detail",
-						})
-						.then((commentText) => {
-							let newTodoEntry = `\n${todoBase}`;
+								if (commentText && commentText.trim() !== "") {
+									newTodoEntry += ` | ${commentText.trim()}`;
+								}
 
-							if (commentText && commentText.trim() !== "") {
-								newTodoEntry += ` | ${commentText.trim()}`;
-							}
+								try {
+									if (item) {
+										// insert the new todo as a subtask of the item
+										newTodoEntry = `${"-".repeat(
+											item.todoItem.level + 1
+										)}${newTodoEntry.trim()}`;
 
-							try {
-								fs.appendFileSync(todoFilePath, newTodoEntry);
-								this._todoProvider?.refresh();
-							} catch (err) {
-								vscode.window.showErrorMessage(
-									"Failed to add new todo: " + (err as Error).message
-								);
-							}
-						});
-				});
-		});
+										const lineToInsertAfter = item.todoItem.subtasks.length
+											? item.todoItem.subtasks.length
+											: item.todoItem.lineNumber! + 1;
+
+										const fileContent = fs.readFileSync(todoFilePath, "utf-8");
+										const lines = fileContent.split("\n");
+
+										// Line numbers are 1-based, array indices are 0-based
+										lines.splice(lineToInsertAfter, 0, newTodoEntry);
+
+										fs.writeFileSync(todoFilePath, lines.join("\n"));
+									} else {
+										// Append to the end of the file if no item or item has no line number
+										fs.appendFileSync(todoFilePath, `\n${newTodoEntry}`);
+									}
+
+									this._todoProvider?.refresh();
+								} catch (err) {
+									vscode.window.showErrorMessage(
+										"Failed to add new todo: " + (err as Error).message
+									);
+								}
+							});
+					});
+			}
+		);
 
 		fs.watch(
 			path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, "todo.txt"),

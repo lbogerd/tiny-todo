@@ -2,9 +2,9 @@
 _[x] use done.txt instead of todo-archive.txt
 _[x] add timestamp for blocks instead of per line
 [ ] smoothen task creation and editing
-_[ ] add task with button
-__[ ] 'add' in view menu bar | to create 0 level task
-__[ ] 'add' in view item | on hover, like the archive button
+_[x] add task with button
+__[x] 'add' in view menu bar | to create 0 level task
+__[x] 'add' in view item | on hover, like the archive button
 _[ ] inline editing | experimental, not sure if this is possible
 __[ ] onclick: inline editing
 _[ ] easy way to open file | not sure what is handy, mess about and pick one of the below
