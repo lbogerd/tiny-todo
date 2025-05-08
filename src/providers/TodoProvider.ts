@@ -40,6 +40,11 @@ export class TodoTreeItem extends vscode.TreeItem {
 			? vscode.TreeItemCheckboxState.Checked
 			: vscode.TreeItemCheckboxState.Unchecked;
 		this.contextValue = `todoItem`;
+		this.command = {
+			command: "tinyTodo.itemClicked",
+			title: "Item Clicked",
+			arguments: [this.todoItem],
+		};
 	}
 }
 

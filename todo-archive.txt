@@ -1,3 +1,27 @@
+__[x] button on item | open cursor on selected item?
+# 5/8/2025, 12:29:54 PM
+__[x] button in menu bar
+# 5/8/2025, 12:29:54 PM
+__[x] onclick: inline editing
+# 5/8/2025, 12:29:54 PM
+__[x] 'add' in view item | on hover, like the archive button
+# 5/8/2025, 12:29:54 PM
+__[x] 'add' in view menu bar | to create 0 level task
+# 5/8/2025, 12:29:54 PM
+_[x] easy way to open file | not sure what is handy, mess about and pick one of the below
+# 5/8/2025, 12:29:54 PM
+_[x] inline editing | experimental, not sure if this is possible
+# 5/8/2025, 12:29:54 PM
+_[x] add task with button
+# 5/8/2025, 12:29:54 PM
+[x] smoothen task creation and editing
+# 5/8/2025, 12:29:54 PM
+_[x] add timestamp for blocks instead of per line
+# 5/8/2025, 12:29:54 PM
+_[x] use done.txt instead of todo-archive.txt
+# 5/8/2025, 12:29:54 PM
+[x] rework archive functionality
+# 5/8/2025, 12:29:54 PM
 __[x] or dont im not your mom | no genuinely
 # 2/7/2024, 11:08:43 PM
 __[x] make sure to do some stuff and so on

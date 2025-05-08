@@ -2,6 +2,7 @@ import * as fs from "fs";
 import path from "path";
 import * as vscode from "vscode";
 import {
+	TodoItem,
 	TodoProvider,
 	TodoTreeItem,
 	stringifyItem,
@@ -116,6 +117,26 @@ export class TodoView {
 								}
 							});
 					});
+			}
+		);
+
+		vscode.commands.registerCommand(
+			"tinyTodo.itemClicked",
+			(item: TodoItem) => {
+				const todoFilePath = path.join(
+					vscode.workspace.workspaceFolders![0].uri.fsPath,
+					"todo.txt"
+				);
+				vscode.workspace.openTextDocument(todoFilePath).then((doc) => {
+					vscode.window.showTextDocument(doc, {
+						selection: new vscode.Range(
+							item.lineNumber!,
+							item.level + 4,
+							item.lineNumber!,
+							item.level + 4 + item.label.length
+						),
+					});
+				});
 			}
 		);
 
